@@ -18,6 +18,7 @@ namespace Netizen.Text
             };
             DefaultSerializerOptions.Converters.Add(new JsonDateTimeConverter());
             DefaultSerializerOptions.Converters.Add(new JsonDateTimeNullableConverter());
+            DefaultSerializerOptions.Converters.Add(new JsonEnumConverter());
         }
 
         public static string ToJson<T>(this T one)
