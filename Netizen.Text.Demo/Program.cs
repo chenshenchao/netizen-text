@@ -9,7 +9,7 @@ namespace Netizen.Text.Demo
             DemoPerson dd = new DemoPerson
             {
                 Gender = DemoGender.Male,
-                Name = "Boo",
+                Name = "Boo Foo AAbbC".To(NamingStyle.SnakeCase),
                 Age = 10,
                 Birthday = DateTime.Now - TimeSpan.FromDays(365 * 10),
             };
