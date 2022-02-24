@@ -29,23 +29,57 @@ namespace Netizen.Text
         /// <returns></returns>
         public static string To(this string source, NamingStyle style)
         {
-            string temp = UpPattern.Replace(source, "_$0");
-            string[] group = SpanPattern.Replace(temp, "_")
-                .Split('_')
-                .Where(t => !string.IsNullOrEmpty(t))
-                .ToArray();
             switch (style)
             {
                 case NamingStyle.CamelCase:
-                    return string.Join(string.Empty, group.Select((t, j) => j > 0 ? t.ToFirstUpper() : t.ToLower()));
+                    return ToCamelCase(source);
                 case NamingStyle.KebabCase:
-                    return string.Join('-', group.Select(t => t.ToLower()));
+                    return ToKebabCase(source);
                 case NamingStyle.SnakeCase:
-                    return string.Join('_', group.Select(t => t.ToLower()));
+                    return ToSnakeCase(source);
                 case NamingStyle.PascalCase:
-                    return string.Join(string.Empty, group.Select(t => t.ToFirstUpper()));
+                    return ToPascalCase(source);
             }
-            return string.Join(' ', group.Select((t, j) => j > 0 ? t.ToLower() : t.ToFirstUpper()));
+            string[] words = ToWords(source);
+            return string.Join(' ', words.Select((t, j) => j > 0 ? t.ToLower() : t.ToFirstUpper()));
+        }
+
+        public static string ToCamelCase(this string source)
+        {
+            string[] words = ToWords(source);
+            return string.Join(string.Empty, words.Select((t, j) => j > 0 ? t.ToFirstUpper() : t.ToLower()));
+        }
+
+        public static string ToKebabCase(this string source)
+        {
+            string[] words = ToWords(source);
+            return string.Join('-', words.Select(t => t.ToLower()));
+        }
+
+        public static string ToSnakeCase(this string source)
+        {
+            string[] words = ToWords(source);
+            return string.Join('_', words.Select(t => t.ToLower()));
+        }
+
+        public static string ToPascalCase(this string source)
+        {
+            string[] words = ToWords(source);
+            return string.Join(string.Empty, words.Select(t => t.ToFirstUpper()));
+        }
+
+        /// <summary>
+        /// 切词。
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static string[] ToWords(this string source)
+        {
+            string temp = UpPattern.Replace(source, "_$0");
+            return SpanPattern.Replace(temp, "_")
+                .Split('_')
+                .Where(t => !string.IsNullOrEmpty(t))
+                .ToArray();
         }
 
         /// <summary>

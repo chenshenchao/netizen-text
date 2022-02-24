@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace Netizen.Text
+namespace Netizen.Text.Json
 {
     public static class JsonExtends
     {

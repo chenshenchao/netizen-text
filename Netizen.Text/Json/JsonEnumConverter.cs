@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Netizen.Text
+namespace Netizen.Text.Json
 {
     public class JsonEnumConverter : JsonConverterFactory
     {

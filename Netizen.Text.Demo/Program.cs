@@ -1,4 +1,5 @@
 ﻿using System;
+using Netizen.Text.Json;
 
 namespace Netizen.Text.Demo
 {
