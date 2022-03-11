@@ -18,7 +18,7 @@ namespace Netizen.Text
     /// </summary>
     public static class NamingStyleExtends
     {
-        private static Regex UpPattern = new Regex("[A-Z]([^A-Z]|$)");
+        private static Regex UpPattern = new Regex("(?<![A-Z])[A-Z]([^A-Z-_ ]|$)");
         private static Regex SpanPattern = new Regex("[ _-]+");
 
         /// <summary>
@@ -44,10 +44,14 @@ namespace Netizen.Text
             return string.Join(' ', words.Select((t, j) => j > 0 ? t.ToLower() : t.ToFirstUpper()));
         }
 
-        public static string ToCamelCase(this string source)
+        public static string ToCamelCase(this string source, bool strict=true)
         {
-            string[] words = ToWords(source);
-            return string.Join(string.Empty, words.Select((t, j) => j > 0 ? t.ToFirstUpper() : t.ToLower()));
+            var words = ToWords(source).Select((t, j) => {
+                if (j == 0) return t.ToLower();
+                if (strict) t = t.ToLower();
+                return t.ToFirstUpper();
+             });
+            return string.Join(string.Empty, words);
         }
 
         public static string ToKebabCase(this string source)
@@ -62,10 +66,14 @@ namespace Netizen.Text
             return string.Join('_', words.Select(t => t.ToLower()));
         }
 
-        public static string ToPascalCase(this string source)
+        public static string ToPascalCase(this string source, bool strict=true)
         {
-            string[] words = ToWords(source);
-            return string.Join(string.Empty, words.Select(t => t.ToFirstUpper()));
+            var words = ToWords(source).Select(t =>
+            {
+                if (strict) t = t.ToLower();
+                return t.ToFirstUpper();
+            });
+            return string.Join(string.Empty, words);
         }
 
         /// <summary>

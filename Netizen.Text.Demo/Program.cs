@@ -18,6 +18,7 @@ namespace Netizen.Text.Demo
             Console.WriteLine(ddj);
             DemoPerson ddjd = ddj.JsonAs<DemoPerson>();
             Console.WriteLine($"{ddjd.Name}({ddjd.Gender}) is {ddjd.Age} age({ddjd.Birthday}).");
+            Console.WriteLine("HTTP_METHOD".ToSnakeCase());
             Console.ReadLine();
         }
     }
