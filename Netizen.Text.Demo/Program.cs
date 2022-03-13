@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Text;
+using System.Text.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Diagnostics;
 using Netizen.Text.Json;
+using Netizen.Text.Demo.Properties;
 
 namespace Netizen.Text.Demo
 {
@@ -7,19 +13,20 @@ namespace Netizen.Text.Demo
     {
         static void Main(string[] args)
         {
-            DemoPerson dd = new DemoPerson
+            ReadOnlySpan<byte> utf8Bom = new byte[] { 0xEF, 0xBB, 0xBF };
+            ReadOnlySpan<byte> r1 = Resources._1;
+            ReadOnlySpan<byte> r = r1.StartsWith(utf8Bom) ? r1.Slice(utf8Bom.Length) : r1;
+            JsonDocument d = JsonDocument.Parse(r.ToArray());
+            Stopwatch sw = Stopwatch.StartNew();
+            sw.Start();
+            var fs = d.Flat();
+            sw.Stop();
+            Console.WriteLine("elapsed: {0}ms", sw.ElapsedMilliseconds);
+            foreach (var f in fs)
             {
-                Gender = DemoGender.Male,
-                Name = "Boo Foo AAbbC".To(NamingStyle.SnakeCase),
-                Age = 10,
-                Birthday = DateTime.Now - TimeSpan.FromDays(365 * 10),
-            };
-            string ddj = dd.ToJson();
-            Console.WriteLine(ddj);
-            DemoPerson ddjd = ddj.JsonAs<DemoPerson>();
-            Console.WriteLine($"{ddjd.Name}({ddjd.Gender}) is {ddjd.Age} age({ddjd.Birthday}).");
-            Console.WriteLine("HTTP_METHOD".ToSnakeCase());
-            Console.ReadLine();
+                var v = f.Value is List<object> ? (f.Value as List<object>).FormatString() : f.Value.ToString();
+                Console.WriteLine("{0} => {1}", f.Key, v);
+            }
         }
     }
 }
